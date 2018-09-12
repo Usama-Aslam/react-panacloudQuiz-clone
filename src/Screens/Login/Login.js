@@ -7,7 +7,7 @@ class Login extends Component {
 
     render() {
         console.log(this.props)
-        const { updateText, validation, loginEmail, userEmail } = this.props;
+        const { updateText, validation} = this.props;
         return (
             <div>
                 <input type="email" onChange={updateText} name="loginEmail" />
