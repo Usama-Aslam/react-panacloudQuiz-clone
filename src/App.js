@@ -8,36 +8,41 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      validation: false,
-      user: false,
-      name: null,
-      userEmail: null,
-      userPass: null,
-      loginEmail: null,
-      loginPass: null
+      validCondition: false,
+      userFlag: false,
+      name: '',
+      userEmail: '',
+      userPass: '',
+      loginEmail: '',
+      loginPass: ''
     }
     this.updateText = this.updateText.bind(this)
     this.showLogin = this.showLogin.bind(this)
+    this.checkValidation = this.checkValidation.bind(this)
   }
-  updateText(e) {
+  async updateText(e) {
     console.log(e.target.name)
     const name = e.target.name;
     const value = e.target.value;
 
     if (name.match('userEmail')) {
-      this.setState({
+      await this.setState({
         userEmail: value
       })
+      localStorage.setItem('email', this.state.userEmail)
     }
     else if (name.match('name')) {
-      this.setState({
+      await this.setState({
         name: value
       })
+      localStorage.setItem('name', this.state.name)
+
     }
     else if (name.match('userPassword')) {
-      this.setState({
+      await this.setState({
         userPass: value
       })
+      localStorage.setItem('password', this.state.userPass)
     }
     else if (name.match('loginEmail')) {
       this.setState({
@@ -49,31 +54,36 @@ class App extends Component {
         loginPass: value
       })
     }
+    // localStorage.setItem('email', this.state.userEmail)
+    // localStorage.setItem('name', this.state.name)
+    // localStorage.setItem('password', this.state.userPass)
   }
 
   showLogin() {
     this.setState({
-      user: true
+      userFlag: true
     })
   }
   hideLogin() {
     this.setState({
-      user: false
+      userFlag: false
     })
   }
-
-  validation() {
-    this.setState({
-      validation: true
-    })
-    console.log(this.state.validation)
+  async checkValidation() {
+    const { userEmail, loginEmail } = this.state
+    if (userEmail.match(loginEmail)) {
+      await this.setState({
+        validCondition: true
+      })
+    }
+    console.log("Email is Valid :", this.state.validCondition)
   }
   render() {
-    const { name, user, userEmail, userPass, loginEmail, loginPass } = this.state;
+    const { name, userFlag, userEmail, userPass, loginEmail, loginPass } = this.state;
     return (
       <div>
-        {!user && <Signup updateText={this.updateText} showLogin={this.showLogin} />}
-        {user && <Login updateText={this.updateText} userEmail={userEmail} userPassword={userPass} loginEmail={loginEmail} loginPass={loginPass} />}
+        {!userFlag && <Signup updateText={this.updateText} showLogin={this.showLogin} />}
+        {userFlag && <Login validation={this.checkValidation} updateText={this.updateText} userEmail={userEmail} userPassword={userPass} loginEmail={loginEmail} loginPass={loginPass} />}
         <p>{userEmail}</p>
         <p>{userPass}</p>
         <p>{loginEmail}</p>
