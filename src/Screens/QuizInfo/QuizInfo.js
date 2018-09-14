@@ -10,17 +10,24 @@ class QuizInfo extends Component {
         const { quizList, showTest } = this.props;
         return (
             <div>
-                <table>
-                    <tbody>
-                        {quizList.map((value, index) => {
-                            return (<tr key={index}>
-                                <td>{value}</td>
-                                <td><button onClick={() => showTest(index)}>Start Test</button></td>
-                            </tr>)
-                        })}
-                    </tbody>
-                </table>
-            </div>
+
+                {quizList.map((value, index) => {
+                    return (
+                        <ul>
+                            <li>{value.quizname}</li>
+                            <li>
+                                <ul>
+                                    {value.quizNumber.map((quizNum, innerIndex) => {
+                                        return <li key={innerIndex}>{quizNum}< button onClick={() => showTest(index, innerIndex)}>Start Test</button></li>
+                                    })}
+                                </ul>
+                            </li>
+                        </ul>)
+                }
+                )
+                }
+
+            </div >
         );
     }
 }
