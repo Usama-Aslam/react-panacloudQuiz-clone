@@ -5,11 +5,27 @@ import Login from './Screens/Login/Login'
 import Signup from './Screens/Signup/Signup';
 import QuizInfo from './Screens/QuizInfo/QuizInfo';
 import Quiz from './Screens/Quiz/Quiz';
+import Result from './Screens/Result/Result';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
+      testGiven: [{
+        testStatus: [{ test: false, score: null }, { test: false, score: null }, { test: false, score: null }]
+      },
+      {
+        testStatus: [{ test: false, score: null }, { test: false, score: null }, { test: false, score: null }]
+      },
+      {
+        testStatus: [{ test: false, score: null }, { test: false, score: null }, { test: false, score: null }]
+      }
+      ],
+      questionLength: null,
+      score: null,
+      quizShowFlag: false,
+      resultShowFlag: false,
+      resultFlag: false,
       validFlag: false,
       userFlag: false,
       quizInfoFlag: false,
@@ -209,6 +225,7 @@ class App extends Component {
     this.showLogin = this.showLogin.bind(this)
     this.checkValidation = this.checkValidation.bind(this)
     this.showTest = this.showTest.bind(this)
+    this.showResult = this.showResult.bind(this)
   }
   async updateText(e) {
     console.log(e.target.name)
@@ -255,19 +272,65 @@ class App extends Component {
       userFlag: false
     })
   }
-  showTest(index, innerIndex) {
+  async showTest(index, innerIndex) {
+    const { testGiven } = this.state;
+    let test = JSON.parse(localStorage.getItem("testStatus"));
+    if (test) {
+      test[index].testStatus[innerIndex].test = true;
+      localStorage.setItem("testStatus", JSON.stringify(test))
+    }
+    else {
+      testGiven[index].testStatus[innerIndex].test = true
+      localStorage.setItem("testStatus", JSON.stringify(testGiven))
+    }
+
+    await this.setState({
+      quizInfoFlag: true,
+      resultFlag: false,
+      currentIndex: index,
+      currentQuizIndex: innerIndex,
+      testGiven
+    })
+    console.log(test)
+
+    // console.log(testGiven[0].testStatus[1].test)
     console.log('index**', index)
     console.log('innerIndex**', innerIndex)
-    this.setState({
-      quizInfoFlag: true,
-      currentIndex: index,
-      currentQuizIndex: innerIndex
-    })
-
   }
+  async showResult(quizScore, quizLength) {
+    const { currentIndex, currentQuizIndex, testGiven } = this.state
+
+    // testGiven[currentIndex].testStatus[currentQuizIndex].score = quizScore;
+    let score = JSON.parse(localStorage.getItem("testStatus"))
+    if (score) {
+      score[currentIndex].testStatus[currentQuizIndex].score = quizScore;
+      localStorage.setItem("testStatus", JSON.stringify(score))
+    }
+    else {
+      testGiven[currentIndex].testStatus[currentQuizIndex].score = quizScore;
+      localStorage.setItem("testStatus", JSON.stringify(testGiven))
+    }
+
+    await this.setState({
+      quizInfoFlag: false,
+      quizShowFlag: true,
+      resultShowFlag: true,
+      resultFlag: true,
+      score: quizScore,
+      questionLength: quizLength,
+      testGiven
+    })
+    console.log(testGiven)
+    // localStorage.setItem('Score', JSON.stringify(testGiven))
+  }
+
+
+
   async checkValidation() {
-    const { userEmail, loginEmail, userPass } = this.state
-    if ((userEmail.match(localStorage.getItem('email'))) && (userPass.match(localStorage.getItem('password')))) {
+    const { userEmail, loginEmail, userPass, loginPass } = this.state;
+    const validEmail = localStorage.getItem('email');
+    const validPass = localStorage.getItem('password');
+    if ((loginEmail.match(validEmail)) && loginPass.match(validPass)) {
       await this.setState({
         validFlag: true
       })
@@ -277,13 +340,14 @@ class App extends Component {
 
 
   render() {
-    const { name, userFlag, userEmail, userPass, loginEmail, loginPass, validFlag, quizLists, quizInfoFlag, currentIndex, currentQuizIndex, quizQuestion } = this.state;
+    const { name, userFlag, userEmail, userPass, loginEmail, loginPass, validFlag, quizLists, quizInfoFlag, currentIndex, currentQuizIndex, quizQuestion, resultFlag, quizShowFlag, resultShowFlag, score, questionLength, testGiven } = this.state;
     return (
       <div>
         {!userFlag && !validFlag && <Signup updateText={this.updateText} showLogin={this.showLogin} />}
         {userFlag && !validFlag && <Login validation={this.checkValidation} updateText={this.updateText} />}
-        {userFlag && validFlag && !quizInfoFlag && <QuizInfo quizList={quizLists} showTest={this.showTest} />}
-        {userFlag && validFlag && quizInfoFlag && <Quiz quizQuest={quizQuestion[currentIndex].quizQuestions[currentQuizIndex]} />}
+        {userFlag && validFlag && !quizInfoFlag && !quizShowFlag && <QuizInfo quizList={quizLists} showTest={this.showTest} testIndex={currentIndex} testInnerIndex={currentQuizIndex} testGiven={testGiven} score={score} />}
+        {userFlag && validFlag && quizInfoFlag && <Quiz quizQuest={quizQuestion[currentIndex].quizQuestions[currentQuizIndex]} showResult={this.showResult} />}
+        {userFlag && validFlag && resultFlag && resultShowFlag && <Result score={score} questionLength={questionLength} />}
       </div>
     );
   }
