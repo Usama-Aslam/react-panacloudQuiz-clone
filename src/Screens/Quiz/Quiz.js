@@ -17,7 +17,7 @@ class QuizInfo extends Component {
             sec: null,
             quizResultFlag: false
         }
-        this.minute = 0;
+        this.minute = 1;
         this.second = 60;
         this.timeStart = null;
         this.next = this.next.bind(this);
@@ -118,7 +118,7 @@ class QuizInfo extends Component {
                     showResult(score, quizQuest.length)
                 }
             }
-        }, 10);
+        }, 1000);
     }
 
     render() {
