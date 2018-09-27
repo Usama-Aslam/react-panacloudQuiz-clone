@@ -1,0 +1,20 @@
+   {quizList.map((value, index) => {
+                    return (
+                        <ul className="list-group" >
+                            <li className="list-group-item quizName" onClick={this.toggleList}>{value.quizname}</li>
+
+                            <li className="list-group-item  subQuizDivList">
+
+                                <span className='sub-quizList slideInDown' >
+
+                                    {value.quizNumber.map((quizNum, innerIndex) => {
+                                        return <ul key={innerIndex}>
+                                            {<li className="list-group-item" key={innerIndex}>{quizNum} &nbsp;&nbsp;{this.testCondition(index, innerIndex) && < button className="btn btn-primary btn-sm" onClick={() => {
+                                                showTest(index, innerIndex)
+                                            }}>Start Test</button>}&nbsp;&nbsp;&nbsp;{this.scoreCondition(index, innerIndex) && <span>{a[index].testStatus[innerIndex].score}</span>}</li>}
+                                        </ul>
+                                    })}
+                                </span>
+                            </li>
+                        </ul>)
+                })}

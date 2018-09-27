@@ -26,3 +26,113 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body{
+/* background:#54b9ed; */
+}
+
+#loginDiv{
+  margin-top:55px !important;
+  padding:50px; 
+  width:40% !important;
+  line-height: 2em;
+  margin:0px auto;
+  background: white;
+  box-shadow:1px 12px 30px 0px rgb(110, 110, 110);
+}
+#loginDiv h1{
+  text-align:center;
+  margin-bottom:30px;
+}
+.heading{
+  text-align:center;
+  font-family: 'Times New Roman', Times, serif;
+  color:white;
+}
+
+#signUpDiv{
+  padding:50px; 
+  width:40% !important;
+  line-height: 3.5em;
+  margin:0px auto;
+  background:white;
+  box-shadow:1px 12px 30px 0px rgb(110, 110, 110);
+}
+#signUpDiv h1{
+  text-align:center;
+}
+
+.login-avatar{
+  width:120px;
+  height:120px;
+  display: block;
+  margin:0 auto !important;
+}
+
+.quizList{
+  list-style: none;
+}
+.quizList li{
+  list-style: none;
+}
+
+.open-sub-quiz{
+   border-radius: 50px;
+   width:30px;
+   height:30px;
+   font-size: 20px;
+   padding: 0px;
+   margin-left:10px;
+}
+
+.hide{
+  display: none !important;
+}
+.show{
+  display: block
+}
+.quizName{
+  background: #007bff24 !important;
+  font-size: 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+.quizName>span{
+  float:right;
+  color:black;
+  font-size: 20px;
+  transition:1s;
+}
+.header-heading{
+  font-size:16px;
+}
+  .slideInDown {
+    -webkit-animation: slideInDown 1s linear ;
+    animation:slideInDown 1s linear;
+  }
+.subQuizDivList{
+  overflow: hidden;
+}
+.scoreHeading{
+  color:#00b900;
+}
+
+.optionClass{
+  background:white !important;
+}
+#quizContainer, #resultContainer{
+    margin:0px auto;
+    background: rgb(255, 255, 255);
+    width:100%;
+    max-width:500px;
+    padding:30px 10px;
+    text-align: center;
+    box-shadow: 1px 1px 10px 1px rgb(163, 163, 163);
+    font-family: "Trebuchet MS",Arial, Helvetica, sans-serif;
+}
+#timer{
+  font-weight: bold;
+  font-size: 30px;
+}
+.logOut{
+  float:right;
+}

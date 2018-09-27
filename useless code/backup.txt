@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import './animation.css';
 import Login from './Screens/Login/Login'
 import Signup from './Screens/Signup/Signup';
 import QuizInfo from './Screens/QuizInfo/QuizInfo';
@@ -24,7 +23,6 @@ class App extends Component {
       ],
       questionLength: null,
       score: null,
-      correct: null,
       quizShowFlag: false,
       resultShowFlag: false,
       resultFlag: false,
@@ -38,56 +36,47 @@ class App extends Component {
       loginPass: '',
       quizLists: [{
         quizname: 'JAVASCRIPT',
-        quizNumber: ["Quiz 1", "Quiz 2", "Quiz 3"]
+        quizNumber: ["quiz1", "quiz2", "quiz3"]
       },
       {
         quizname: 'CSS',
-        quizNumber: ["Quiz 1", "Quiz 2", "Quiz 3"]
+        quizNumber: ["quiz1", "quiz2", "quiz3"]
       },
       {
         quizname: 'HTML',
-        quizNumber: ["Quiz 1", "Quiz 2", "Quiz 3"]
+        quizNumber: ["quiz1", "quiz2", "quiz3"]
       },],
       currentIndex: null,
       currentQuizIndex: null,
       quizQuestion: [
         {
           name: "JAVASCRIPT",
-          quizQuestions: [[
-            {
-              "question": "How to create alert box?",
-              "option1": "alert='hello world'",
-              "option2": "aler('hello world')",
-              "option3": "alert.('hello world')",
-              "option4": "alert('hello world')",
-              "answer": "4"
-            },
-            {
-              "question": "How to create alert box?",
-              "option1": "alert='hello world'",
-              "option2": "aler('hello world')",
-              "option3": "alert.('hello world')",
-              "option4": "alert('hello world')",
-              "answer": "4"
-            },
-            {
+          quizQuestions: [[{
+            "question": "How to create alert box?",
+            "option1": "alert='hello world'",
+            "option2": "aler('hello world')",
+            "option3": "alert.('hello world')",
+            "option4": "alert('hello world')",
+            "answer": "4"
+          },
+          {
 
-              "question": "How to create variable?",
-              "option1": "variable name = 'ali'",
-              "option2": "var name = 'ali'",
-              "option3": "variable: 'ali'",
-              "option4": "variable. 'ali'",
-              "answer": "2"
-            },
-            {
+            "question": "How to create variable?",
+            "option1": "variable name = 'ali'",
+            "option2": "var name = 'ali'",
+            "option3": "variable: 'ali'",
+            "option4": "variable. 'ali'",
+            "answer": "2"
+          },
+          {
 
-              "question": "How to create function?",
-              "option1": "Function(){}",
-              "option2": "function.create()",
-              "option3": "function(){}",
-              "option4": "function{}",
-              "answer": "3"
-            }],
+            "question": "How to create function?",
+            "option1": "Function(){}",
+            "option2": "function.create()",
+            "option3": "function(){}",
+            "option4": "function{}",
+            "answer": "3"
+          }],
           [{
             "question": "How to push value in array?",
             "option1": "arr.push(value)",
@@ -237,8 +226,6 @@ class App extends Component {
     this.checkValidation = this.checkValidation.bind(this)
     this.showTest = this.showTest.bind(this)
     this.showResult = this.showResult.bind(this)
-    this.logOut = this.logOut.bind(this)
-    this.moreQuiz = this.moreQuiz.bind(this)
   }
   async updateText(e) {
     console.log(e.target.name)
@@ -287,16 +274,7 @@ class App extends Component {
   }
   async showTest(index, innerIndex) {
     const { testGiven } = this.state;
-    let test = JSON.parse(localStorage.getItem("testStatus"));
-    if (test) {
-      test[index].testStatus[innerIndex].test = true;
-      localStorage.setItem("testStatus", JSON.stringify(test))
-    }
-    else {
-      testGiven[index].testStatus[innerIndex].test = true
-      localStorage.setItem("testStatus", JSON.stringify(testGiven))
-    }
-
+    testGiven[index].testStatus[innerIndex].test = true
     await this.setState({
       quizInfoFlag: true,
       resultFlag: false,
@@ -304,27 +282,19 @@ class App extends Component {
       currentQuizIndex: innerIndex,
       testGiven
     })
-    console.log(test)
+    const status = localStorage.getItem("testStatus")
 
-    // console.log(testGiven[0].testStatus[1].test)
+    status[index].testStatus[innerIndex].test = true
+    localStorage.setItem("testStatus", JSON.stringify(testGiven))
+
     console.log('index**', index)
     console.log('innerIndex**', innerIndex)
+    // console.log(testGiven[0].testStatus[1].test)
   }
-
-  async showResult(quizScore, quizLength, totalCorrect) {
+  async showResult(quizScore, quizLength) {
     const { currentIndex, currentQuizIndex, testGiven } = this.state
-
-    // testGiven[currentIndex].testStatus[currentQuizIndex].score = quizScore;
-    let score = JSON.parse(localStorage.getItem("testStatus"))
-    if (score) {
-      score[currentIndex].testStatus[currentQuizIndex].score = quizScore;
-      localStorage.setItem("testStatus", JSON.stringify(score))
-    }
-    else {
-      testGiven[currentIndex].testStatus[currentQuizIndex].score = quizScore;
-      localStorage.setItem("testStatus", JSON.stringify(testGiven))
-    }
-
+    console.log(currentIndex, currentQuizIndex)
+    testGiven[currentIndex].testStatus[currentQuizIndex].score = quizScore;
     await this.setState({
       quizInfoFlag: false,
       quizShowFlag: true,
@@ -332,26 +302,13 @@ class App extends Component {
       resultFlag: true,
       score: quizScore,
       questionLength: quizLength,
-      correct: totalCorrect,
       testGiven
     })
     console.log(testGiven)
-    // localStorage.setItem('Score', JSON.stringify(testGiven))
+    localStorage.setItem('Score', JSON.stringify(testGiven))
   }
 
-  logOut() {
-    this.setState({
-      userFlag: false,
-      validFlag: false
-    })
-  }
 
-  moreQuiz() {
-    this.setState({
-      quizInfoFlag: false,
-      quizShowFlag: false
-    })
-  }
 
   async checkValidation() {
     const { userEmail, loginEmail, userPass, loginPass } = this.state;
@@ -365,30 +322,17 @@ class App extends Component {
     console.log("Email is Valid :", this.state.validFlag)
   }
 
-  componentWillMount() {
-    let user = localStorage.getItem('email');
-    let password = localStorage.getItem('password')
 
-    if (user && password) {
-      this.setState({
-        userFlag: true,
-        validFlag: true
-      })
-    }
-  }
-
-  
   render() {
-    const { moreQuiz, name, userFlag, userEmail, userPass, loginEmail, loginPass, validFlag, quizLists, quizInfoFlag, currentIndex, currentQuizIndex, quizQuestion, resultFlag, quizShowFlag, resultShowFlag, score, questionLength, testGiven, correct } = this.state;
+    const { name, userFlag, userEmail, userPass, loginEmail, loginPass, validFlag, quizLists, quizInfoFlag, currentIndex, currentQuizIndex, quizQuestion, resultFlag, quizShowFlag, resultShowFlag, score, questionLength, testGiven } = this.state;
     return (
       <div>
-        {userFlag && validFlag && < button className="btn btn-warning logOut" onClick={this.logOut}>Log Out</button>}
         {!userFlag && !validFlag && <Signup updateText={this.updateText} showLogin={this.showLogin} />}
         {userFlag && !validFlag && <Login validation={this.checkValidation} updateText={this.updateText} />}
-        {userFlag && validFlag && !quizInfoFlag && !quizShowFlag && <QuizInfo quizQuestion={quizQuestion} quizList={quizLists} showTest={this.showTest} testIndex={currentIndex} testInnerIndex={currentQuizIndex} testGiven={testGiven} score={score} />}
+        {userFlag && validFlag && !quizInfoFlag && !quizShowFlag && <QuizInfo quizList={quizLists} showTest={this.showTest} testIndex={currentIndex} testInnerIndex={currentQuizIndex} testGiven={testGiven} score={score} />}
         {userFlag && validFlag && quizInfoFlag && <Quiz quizQuest={quizQuestion[currentIndex].quizQuestions[currentQuizIndex]} showResult={this.showResult} />}
-        {userFlag && validFlag && resultFlag && resultShowFlag && <Result moreQuiz={this.moreQuiz} score={score} correct={correct} questionLength={questionLength} />}
-      </div >
+        {userFlag && validFlag && resultFlag && resultShowFlag && <Result score={score} questionLength={questionLength} />}
+      </div>
     );
   }
 }

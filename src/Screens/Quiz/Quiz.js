@@ -18,7 +18,7 @@ class QuizInfo extends Component {
             quizResultFlag: false
         }
         this.minute = 1;
-        this.second = 60;
+        this.second = 59;
         this.timeStart = null;
         this.next = this.next.bind(this);
         this.timer = this.timer.bind(this);
@@ -54,6 +54,7 @@ class QuizInfo extends Component {
             }
             else {
                 load++
+                val.checked = false;
                 const question = quizQuest[load].question
                 const option1 = quizQuest[load].option1
                 const option2 = quizQuest[load].option2
@@ -84,10 +85,10 @@ class QuizInfo extends Component {
                 min: this.minute,
                 sec: this.second
             })
-            this.second--;
+            --this.second;
             if (this.second == 0) {
                 this.second = 60
-                this.minute--;
+                --this.minute;
                 this.setState({
                     sec: this.second,
                     min: this.minute
@@ -106,7 +107,7 @@ class QuizInfo extends Component {
                     console.log('value equal')
                     console.log(this.state.correct)
 
-                    score = correct * (100 / quizQuest.length)
+                    score = Math.floor(correct * (100 / quizQuest.length))
 
                     console.log(score)
 
@@ -118,23 +119,56 @@ class QuizInfo extends Component {
                     showResult(score, quizQuest.length)
                 }
             }
-        }, 1000);
+        }, 300);
     }
 
     render() {
         const { quizQuest, showResult } = this.props
-        const { question, opt1, opt2, opt3, opt4, score, min, sec, quizResultFlag } = this.state;
+        const { question, opt1, opt2, opt3, opt4, score, min, sec, quizResultFlag, correct } = this.state;
         return (
-            <div>
+            <div class="container-fluid">
                 <div id="quizContainer">
-                    <p>{min} : {sec}</p>
-                    <h3>{question}</h3>
-                    <input type="radio" value="1" name="option" />{opt1}<br />
-                    <input type="radio" value="2" name="option" />{opt2} <br />
-                    <input type="radio" value="3" name="option" />{opt3} <br />
-                    <input type="radio" value="4" name="option" />{opt4} <br />
-                    {!quizResultFlag && <button onClick={this.next}>click</button>}
-                    {quizResultFlag && <button onClick={() => showResult(score, quizQuest.length)}>Result</button>}
+                    <p>Time</p>
+                    <div id="timer">{min} : {sec}</div>
+                    <p class="lead">{question}</p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="radio" value="1" name="option" />
+                            </div>
+                        </div>
+                        <input type="text" class="form-control optionClass" value={opt1} disabled />
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="radio" value="2" name="option" />
+                            </div>
+                        </div>
+                        <input type="text" class="form-control optionClass" value={opt2} disabled />
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="radio" value="3" name="option" />
+                            </div>
+                        </div>
+                        <input type="text" class="form-control optionClass" value={opt3} disabled />
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <input type="radio" value="4" name="option" />
+                            </div>
+                        </div>
+                        <input type="text" class="form-control optionClass" value={opt4} disabled />
+                    </div>
+                    <br />
+                    {!quizResultFlag && <button className="btn btn-primary" onClick={this.next}>Submit</button>}
+                    {quizResultFlag && <button className="btn btn-success" onClick={() => showResult(score, quizQuest.length, correct)}>Result</button>}
                 </div>
             </div >
         );

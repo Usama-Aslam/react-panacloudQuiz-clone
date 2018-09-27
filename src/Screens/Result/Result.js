@@ -6,11 +6,13 @@ class Result extends Component {
     }
 
     render() {
-        const { score, questionLength } = this.props
+        const { score, questionLength, correct, moreQuiz } = this.props
         return (
-            <div>
-                Total Question: {questionLength};
-                Correct Answer: {score}
+            <div id="resultContainer">
+                <p>Total Question: {questionLength}</p>
+                <p>Correct Answer: {correct}</p>
+                <p>Your Score: {score}</p>
+                <button class="btn btn-info" onClick={moreQuiz} >Show Quiz</button>
             </div >
         );
     }

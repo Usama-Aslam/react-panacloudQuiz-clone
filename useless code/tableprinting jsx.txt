@@ -1,0 +1,40 @@
+    const {list,employeeDetail}=this.state;
+    return <div>
+      <table>
+        <tr>
+              {list.map((value,index)=>{
+                return <td key={index}>{value}</td>
+              })}
+        </tr>
+      </table>
+        <ol> 
+              {employeeDetail.map((insideValue,insideIndex)=>{
+                    return <li key={insideIndex}>{insideValue.fname}{insideValue.lname}{insideValue.email}{insideValue.salary}{insideValue.dates}</li>
+                })}
+        </ol>
+    </div>
+
+
+
+
+    const {list,employeeDetail}=this.state;
+    return <div>
+        <table border="1">
+          <thead>
+            <tr>
+              {list.map((value,index)=>{
+                return <td key={index}>{value}</td>
+              })}
+              <td>Edit</td>
+              <td>Delete</td>
+            </tr>
+            </thead>
+            <tbody>
+              {employeeDetail.map((value,index)=>{
+                return<tr>{value.map((insideValue,insideIndex)=>{
+                    return <td>{insideValue}</td>
+                })}</tr>
+              })}
+            </tbody>
+        </table>
+    </div>

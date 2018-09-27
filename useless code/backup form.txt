@@ -1,0 +1,242 @@
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      formValue:{
+        fname:'',
+        lname:'',
+        email:'',
+        salary:''
+      },
+      btnCondition: false,
+      editState: false,
+      currentIndex:null,
+      btnName: 'Add Employee',
+      user: false,
+      adminEmail: 'admin@gmail.com',
+      adminPass: 12345,
+      addForm: false,
+      list: { fname: 'First Name', lname: 'Last Name', email: 'Email', salary: 'Salary', jobDate: 'Job Date' },
+      employeeDetail: [
+        {
+          dates:"Sun Sep 02 2018 17:19:09 GMT+0500 (Pakistan Standard Time)",
+          email:"abc@gmail.com",
+          fname:"usama",
+          lname:"aslam",
+          salary:"1500"
+        },
+        {
+          dates:"Sun Sep 02 2018 17:20:09 GMT+0500 (Pakistan Standard Time)",
+          email:"cde@gmail.com",
+          fname:"kashan",
+          lname:"yousuf",
+          salary:"2500"
+        }
+      ]
+    }
+  }
+
+  login(form) {
+    console.log(form[0].elements["email"].value)
+    console.log(form[0].elements["password"].value)
+
+    const userEmail = form[0].elements['email'].value;
+    const userPassword = form[0].elements['password'].value;
+    const { adminEmail, adminPass } = this.state;
+    if (userEmail.match(adminEmail) && userPassword.match(adminPass)) {
+      this.setState({
+        user: true
+      })
+      return console.log("Successful Login")
+    }
+    else {
+      console.log("Do not Match")
+    }
+  }
+
+  addEmployeeDetail(forms) {
+    const lname = forms[0].elements['lname'].value;
+    const fname = forms[0].elements['fname'].value;
+    const email = forms[0].elements['email'].value;
+    const salary = forms[0].elements['salary'].value;
+    const dates = new Date().toString();
+
+    const { employeeDetail } = this.state;
+
+    const obj = { fname, lname, email, salary, dates }
+
+    employeeDetail.push(obj)
+
+    console.log(employeeDetail)
+
+    this.setState({
+      employeeDetail,
+      formValue:{
+
+      }
+    })
+  }
+
+ update(forms) {
+    const { employeeDetail,currentIndex } = this.state;
+
+    const fname=forms[0].elements['fname'].value
+    const lname=forms[0].elements['lname'].value
+    const email=forms[0].elements['email'].value
+    const salary=forms[0].elements['salary'].value
+     
+    const dates=employeeDetail[currentIndex].dates;
+
+    const obj={fname,lname,email,salary,dates};
+
+    employeeDetail[currentIndex]=obj;
+
+    this.setState({
+      employeeDetail,
+      editState:!this.state.editState
+    })
+  }
+
+  delete(index) {
+
+  }
+  renderLoginForm() {
+    return <div className="loginDiv">
+      <h1>Sign In</h1>
+      <form>
+        <input type="email" placeholder="email" id="userEmail" name="email" />
+        <br />
+        <br />
+        <input type="password" placeholder="password" id="userPass" name="password" />
+      </form>
+      <br />
+      <br />
+      <button onClick={this.login.bind(this, document.forms)}>Submit</button>
+    </div>
+  }
+
+  updateText(e){
+    const {employeeDetail,currentIndex}=this.state
+    employeeDetail[currentIndex].fname=e.target.value
+    this.setState({
+      employeeDetail
+    })
+  }
+
+  renderEditForm() {
+    const {currentIndex,employeeDetail}=this.state;
+    const values=employeeDetail[currentIndex]
+    return <div>
+      <form className="editForm">
+        Name:<input type="text" placeholder="Enter Name" onChange={this.updateText.bind(this)} name="fname" value={values.fname}/><br/>
+        F.Name:<input type="text" placeholder="Enter Last Name" onChange={this.updateText.bind(this)} name="lname" value={values.lname}/><br/>
+        Email:<input type="email" placeholder="Enter Email"onChange={this.updateText.bind(this)} name="email" value={values.email}/><br/>
+        Salary:<input type="number" placeholder="Enter Salary" onChange={this.updateText.bind(this)} name="salary" value={values.salary}/><br/>
+      </form>
+      <button className="updateBtn" onClick={this.update.bind(this, document.forms)}>Update</button>
+      <button className="cancelBtn" onClick={this.cancel.bind(this, document.forms)}>Cancel</button>
+    </div>
+  }
+
+  renderEmployData() {
+    const { list, employeeDetail } = this.state;
+    return <div>
+      <table>
+          <thead>
+            <tr>
+                <th>{list.fname}</th>
+                <th>{list.lname}</th>
+                <th>{list.email}</th>
+                <th>{list.salary}</th>
+                <th>{list.jobDate}</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+              {employeeDetail.map((value,index)=>{
+                return ( <tr key={index}>
+                <td>{value.fname}</td>
+                <td>{value.lname}</td>
+                <td>{value.email}</td>
+                <td>{value.salary}</td>
+                <td>{value.dates}</td>
+                <td><button onClick={()=>{
+                      this.setState({
+                        editState:true,
+                        currentIndex:index
+                    })
+                  }}>Edit</button></td>
+
+                <td><button onClick={() => {
+                    this.delete.bind(this, index);
+                  }}> Delete</button></td>
+                </tr>)
+              })}
+          </tbody>
+      </table>
+    </div>
+  }
+
+  updateFormValue(e,name){
+    console.log(e)
+  }
+
+  renderAddEmployeeDetailForm() {
+    // const {employeeDetail}=this.state;
+    // employeeDetail.push()
+    const {empty}=this.state;
+    return <div>
+      <h1>EMPLOYEE DETAIL FORM</h1>
+      <form className="employeeForm">
+        <input type="text" placeholder="Enter Name" name="fname"/>
+        <input type="text" placeholder="Enter Last Name" name="lname"/>
+        <input type="email" placeholder="Enter Email" name="email"/>
+        <input type="number" placeholder="Enter Salary" name="salary"/>
+      </form>
+      <button className="submitBtn" onClick={this.addEmployeeDetail.bind(this, document.forms)}>Submit</button>
+    </div>
+  }
+
+  renderAddButton() {
+    return <button className="addBtn" onClick={() => {
+      const { btnName } = this.state;
+
+      if (btnName == "Show Table") {
+        console.log('table showing')
+      }
+      this.setState({
+        addForm: !this.state.addForm,
+        btnName: !this.state.btnCondition ? 'Show Table' : 'Add Employee',
+        btnCondition: !this.state.btnCondition
+      })
+    }}>{this.state.btnName}</button>
+  }
+
+  renderBody() {
+    const { user, addForm, editState } = this.state;
+    return <div className="App-intro">
+      {!user && this.renderLoginForm()}
+      {user && !addForm && editState && this.renderEmployData() && this.renderEditForm()}
+      {user && !addForm && this.renderEmployData()}
+      {user && addForm && this.renderAddEmployeeDetailForm()}
+    </div>
+  }
+
+  render() {
+    const { user, addForm } = this.state;
+    return (
+      <div className="App">
+        {this.renderBody()}
+        {user && this.renderAddButton()}
+      </div>
+    );
+  }
+}
+
+export default App;
