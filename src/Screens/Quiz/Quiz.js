@@ -95,9 +95,8 @@ class QuizInfo extends Component {
                 })
                 if (this.minute < 0) {
                     clearInterval(this.timeStart)
-
-                    const { quizQuest, showResult } = this.props
                     var { score, correct } = this.state;
+                    const { quizQuest, showResult } = this.props
 
                     this.setState({
                         min: 0,
@@ -105,7 +104,7 @@ class QuizInfo extends Component {
                     })
 
                     console.log('value equal')
-                    console.log(this.state.correct)
+                    console.log("correct", this.state.correct)
 
                     score = Math.floor(correct * (100 / quizQuest.length))
 
@@ -116,7 +115,7 @@ class QuizInfo extends Component {
                         quizResultFlag: true
                     })
 
-                    showResult(score, quizQuest.length)
+                    showResult(score, quizQuest.length, correct)
                 }
             }
         }, 300);

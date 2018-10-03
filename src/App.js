@@ -349,7 +349,9 @@ class App extends Component {
   moreQuiz() {
     this.setState({
       quizInfoFlag: false,
-      quizShowFlag: false
+      quizShowFlag: false,
+      resultFlag: false,
+      resultShowFlag: false
     })
   }
 
@@ -377,7 +379,7 @@ class App extends Component {
     }
   }
 
-  
+
   render() {
     const { moreQuiz, name, userFlag, userEmail, userPass, loginEmail, loginPass, validFlag, quizLists, quizInfoFlag, currentIndex, currentQuizIndex, quizQuestion, resultFlag, quizShowFlag, resultShowFlag, score, questionLength, testGiven, correct } = this.state;
     return (
