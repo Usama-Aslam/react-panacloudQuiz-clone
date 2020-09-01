@@ -78,7 +78,7 @@ class QuizInfo extends Component {
         this.timer();
     }
 
-    timer() {
+    timer() {   
 
         this.timeStart = setInterval(() => {
             this.setState({
